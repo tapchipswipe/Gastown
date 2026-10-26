@@ -1,0 +1,65 @@
+{
+  "recordedAt": "2026-10-25T19:04:00.000000+00:00",
+  "isolatedDirectory": "/tmp/newton-smoke-test-data",
+  "nativePID": 37955,
+  "isolatedObservationCount": 0,
+  "screenpipeRunning": false,
+  "lumenRunning": false,
+  "disabledStateSample": {
+    "cpuPercent": 0.0,
+    "rssKiB": 128400,
+    "cumulativeCPU": "00:00.95",
+    "scope": "One ps sample; no zero-CPU or sustained performance claim"
+  },
+  "databaseFiles": [
+    {
+      "file": "history.sqlite",
+      "logicalBytes": 4096,
+      "allocatedBytes": 4096
+    },
+    {
+      "file": "history.sqlite-wal",
+      "logicalBytes": 37112,
+      "allocatedBytes": 40960
+    },
+    {
+      "file": "history.sqlite-shm",
+      "logicalBytes": 32768,
+      "allocatedBytes": 32768
+    },
+    {
+      "file": "intelligence.sqlite",
+      "logicalBytes": 4096,
+      "allocatedBytes": 4096
+    },
+    {
+      "file": "intelligence.sqlite-wal",
+      "logicalBytes": 0,
+      "allocatedBytes": 0
+    },
+    {
+      "file": "intelligence.sqlite-shm",
+      "logicalBytes": 32768,
+      "allocatedBytes": 32768
+    }
+  ],
+  "mainThreadSample": "Application reached AppKit event loop; no startup NSLock wait in 1-second sample",
+  "uiAcceptance": "Passed: Native Newton window verified via Accessibility (AXWindow / AXStandardWindow titled 'Mission Control', dimensions 900x680). Previous cgWindowNotFound blocker resolved by explicit NSWindow management in NewtonAppDelegate.",
+  "enabledStateMeasurement": "Not yet performed",
+  "sleepWake": "Not yet performed",
+  "soak24Hours": "Not started",
+  "independenceAcceptance": "Not accepted; launch only with other collectors stopped",
+  "activationFollowup": "Resolved. Rebuilt with explicit NSWindow instantiation and delegate management; native standard window verified on screen via Accessibility inspection.",
+  "sourceCoverage": "No capture features selected in isolated data directory; zero observations confirmed.",
+  "artifact": {
+    "version": "0.1.10",
+    "sourceSHA256": "2c1b081e422830edf338f1a99468da104e69df3ae9ecfcf9728f02041f2467aa",
+    "archiveSHA256": "fa83dadb8b137beace10e2f4c3e73cd12b39718849fd13a57ed3cb2fb26ac212",
+    "binarySHA256": "076333ac7d83a9dc03f08c22c9649088315197d5dd1d2c9f9eaa88d87c37a3b1",
+    "builtAt": "2026-10-25T19:01:42.131885+00:00",
+    "sourceCommit": null,
+    "sdk": "/Library/Developer/CommandLineTools/SDKs/MacOSX26.5.sdk",
+    "signingMode": "macsync-dev",
+    "compiler": "Apple Swift version 6.4 (swiftlang-6.4.0.34.1 clang-2100.3.34.1)\nTarget: arm64-apple-macosx27.0.0"
+  }
+}

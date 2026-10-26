@@ -1,0 +1,11 @@
+.build/
+build/
+.swiftpm/
+.DS_Store
+*.sqlite*
+*.db*
+.env*
+*.log
+
+__pycache__/
+*.py[cod]

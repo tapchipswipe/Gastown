@@ -1,0 +1,13 @@
+{
+  "nativeLaunch": true,
+  "menuAndShortcuts": true,
+  "selectedWindow": true,
+  "keyboardInterception": true,
+  "meetingTranscription": true,
+  "mailReadTwice": true,
+  "disposableCodexJob": true,
+  "realSleepWakeCycles": 2,
+  "binarySHA256": "2774ba8f7ba4a340b1bb81ca0839fe4ba8bbca86499a7928c64103146e4b7a91",
+  "soakReceiptPath": "/tmp/newton-live-acceptance/soak-receipt.json",
+  "recordedAt": "2026-10-25T19:11:37Z"
+}

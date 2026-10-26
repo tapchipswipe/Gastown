@@ -1,0 +1,88 @@
+#!/usr/bin/env python3
+"""
+Newton manual prompt generator.
+Turns raw ideas into token-frugal, context-anchored engineering prompts.
+"""
+
+import argparse
+import os
+import subprocess
+import sys
+
+NEWTON_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+MEMORY_FILE = os.path.join(NEWTON_ROOT, "MEMORY.md")
+MAX_CHARACTERS = 14000  # Character budget, not a token guarantee.
+
+
+def read_context_brief():
+    if os.path.exists(MEMORY_FILE):
+        try:
+            with open(MEMORY_FILE, "r", encoding="utf-8") as f:
+                content = f.read(2500)
+                # Return first 2000 chars of brief
+                return content[:2500].strip()
+        except Exception:
+            pass
+    return "Newton macOS workspace (Swift 6, actor-isolated EventStore SQLite, event-driven)."
+
+
+def build_prompt(title, objective, target_files=None, snippets=None):
+    parts = []
+    parts.append(f"# TASK: {title}")
+    parts.append(f"\n## Objective\n{objective}")
+
+    brief = read_context_brief()
+    if brief:
+        parts.append(f"\n## Architectural Constraints & Context\n{brief}")
+
+    if target_files:
+        parts.append("\n## Target Files\n" + "\n".join(f"- {f}" for f in target_files))
+
+    if snippets:
+        parts.append("\n## Code References")
+        for path, code in snippets.items():
+            parts.append(f"### {path}\n```swift\n{code}\n```")
+
+    mandatory = """
+## Execution Instructions
+1. Implement the requested changes with zero extraneous dependencies.
+2. Comply strictly with Swift 6 Sendable and concurrency rules.
+3. Keep all features off by default; preserve event-driven architecture with zero polling loops.
+4. Verify changes locally by running `./test.sh` before reporting success.
+5. Work only in the dedicated checkout. Never merge, push, enable unattended jobs or inspect private sessions.
+"""
+
+    warning = "\n[Optional context may be truncated; character budget, not token count.]"
+    share = (MAX_CHARACTERS - len(mandatory) - len(warning) - len(parts)) // len(parts)
+    return mandatory + "\n" + "\n".join(part[:share] for part in parts) + warning
+
+
+def main():
+    parser = argparse.ArgumentParser(description="Generate anchored AI prompts for Newton")
+    parser.add_argument("objective", help="The raw feature or fix idea to implement")
+    parser.add_argument("--title", default="Autonomous Engineering Task", help="Task title")
+    parser.add_argument("--files", nargs="*", default=[], help="Target source file paths")
+    parser.add_argument("--exec", action="store_true", help="Pipe prompt directly to codex exec")
+
+    args = parser.parse_args()
+
+    snippets = {}
+    for f in args.files:
+        full_path = os.path.join(NEWTON_ROOT, f) if not os.path.isabs(f) else f
+        if os.path.exists(full_path):
+            try:
+                with open(full_path, "r", encoding="utf-8") as fp:
+                    snippets[f] = fp.read(1500)
+            except Exception:
+                pass
+
+    prompt = build_prompt(args.title, args.objective, args.files, snippets)
+
+    if args.exec:
+        parser.error("--exec is disabled. Open Newton and use the owned manual runner with an isolated Git worktree.")
+    else:
+        print(prompt)
+
+
+if __name__ == "__main__":
+    main()

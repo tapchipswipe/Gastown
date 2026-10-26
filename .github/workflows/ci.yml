@@ -1,0 +1,32 @@
+name: Newton checks
+on:
+  push:
+    branches: [main]
+    paths-ignore: ['**/*.md']
+  pull_request:
+    paths-ignore: ['**/*.md']
+permissions:
+  contents: read
+concurrency:
+  group: newton-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+jobs:
+  macos:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [macos-15, macos-26]
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - name: Test storage, workspace, networking, and delivery failures
+        run: ./test.sh
+      - name: Build and verify bundle and source receipt
+        run: ./build.sh
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: Newton-${{ matrix.os }}
+          path: |
+            build/Newton.zip
+            build/receipt.json
